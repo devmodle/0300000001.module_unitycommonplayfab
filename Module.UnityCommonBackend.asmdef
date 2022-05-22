@@ -8,7 +8,8 @@
         "Module.UnityCommonExtension",
         "Module.UnityCommonFunc",
         "Module.UnityCommonUtility",
-        "Module.UnityCommonExternals"
+        "Module.UnityCommonExternals",
+        "PlayFab"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

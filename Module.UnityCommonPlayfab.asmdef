@@ -1,5 +1,5 @@
 {
-    "name": "Module.UnityCommonBackend",
+    "name": "Module.UnityCommonPlayfab",
     "rootNamespace": "",
     "references": [
         "Module.UnityCommonDefine",

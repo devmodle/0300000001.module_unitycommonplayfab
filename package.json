@@ -1,7 +1,7 @@
 {
-  "name": "module.unitycommonbackend",
+  "name": "module.unitycommonplayfab",
   "version": "2.4.4",
-  "displayName": "Module.UnityCommonBackend",
+  "displayName": "Module.UnityCommonPlayfab",
   "author": {
     "name": "dante",
     "email": "are2341@nate.com"

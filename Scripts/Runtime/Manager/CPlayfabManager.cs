@@ -35,6 +35,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		LOAD_CHARACTERS,
 
 		LOAD_SERVER_TIME,
+		LOAD_NOTICES,
 		LOAD_LEADERBOARD,
 
 		LOAD_CHARACTER_DATAS,
@@ -93,6 +94,10 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	public virtual void Init(STParams a_stParams) {
 		CFunc.ShowLog("CPlayfabManager.Init", KCDefine.B_LOG_COLOR_PLUGIN);
 
+		PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest() {
+
+		}, null, null);
+
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 초기화 되었을 경우
 		if(this.IsInit) {
@@ -108,6 +113,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 	/** 서버 시간을 로드한다 */
 	public void LoadServerTime(System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog("CPlayfabManager.LoadServerTime", KCDefine.B_LOG_COLOR_PLUGIN);
+
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
@@ -124,15 +131,37 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
+	/** 공지 사항을 로드한다 */
+	public void LoadNotices(System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback, int a_nNumNotices = KCDefine.U_MAX_NUM_PLAYFAB_M_NOTICES) {
+		CFunc.ShowLog($"CPlayfabManager.LoadNotices: {a_nNumNotices}", KCDefine.B_LOG_COLOR_PLUGIN);
+
+#if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+		// 로그인 되었을 경우
+		if(this.IsInit && this.IsLogin) {
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_NOTICES, a_oCallback);
+
+			PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest() {
+				Count = Mathf.Clamp(a_nNumNotices, KCDefine.B_VAL_1_INT, KCDefine.U_MAX_NUM_PLAYFAB_M_NOTICES)
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_NOTICES, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_NOTICES, a_oError));
+		} else {
+			CFunc.Invoke(ref a_oCallback, this, null, false);
+		}
+#else
+		CFunc.Invoke(ref a_oCallback, this, null, false);
+#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+	}
+
 	/** 리더보드를 로드한다 */
-	public void LoadLeaderboard(string a_oStat, int a_nNumStatistics, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback, int a_nSrcIdx = KCDefine.B_VAL_0_INT) {
+	public void LoadLeaderboard(string a_oStatisticsName, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback, int a_nSrcIdx = KCDefine.B_VAL_0_INT, int a_nNumStatistics = KCDefine.U_MAX_NUM_PLAYFAB_M_STATISTICS) {
+		CFunc.ShowLog($"CPlayfabManager.LoadLeaderboard: {a_nSrcIdx}, {a_nNumStatistics}", KCDefine.B_LOG_COLOR_PLUGIN);
+
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_LEADERBOARD, a_oCallback);
 
 			PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
-				StatisticName = a_oStat, StartPosition = a_nSrcIdx, MaxResultsCount = Mathf.Clamp(a_nNumStatistics, KCDefine.B_VAL_0_INT, KCDefine.U_MAX_NUM_PLAYFAB_M_STATISTICS)
+				StatisticName = a_oStatisticsName, StartPosition = a_nSrcIdx, MaxResultsCount = Mathf.Clamp(a_nNumStatistics, KCDefine.B_VAL_1_INT, KCDefine.U_MAX_NUM_PLAYFAB_M_STATISTICS)
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_LEADERBOARD, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_LEADERBOARD, a_oError));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);

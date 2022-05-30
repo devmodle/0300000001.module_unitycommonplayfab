@@ -95,7 +95,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_HANDLE_LOGOUT_RESPONSE_CALLBACK, () => CFunc.Invoke(ref a_oCallback, this));
+		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGOUT_CALLBACK, () => CFunc.Invoke(ref a_oCallback, this));
 	}
 	#endregion			// 함수
 
@@ -104,7 +104,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 로그인 응답을 처리한다 */
 	private void HandleLoginResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
 		CFunc.ShowLog($"CPlayfabManager.HandleLoginResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_HANDLE_LOGIN_RESPONSE_CALLBACK, () => this.UserID = a_bIsSuccess ? (a_oResult as LoginResult).PlayFabId : string.Empty);
+		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGIN_CALLBACK, () => this.UserID = a_bIsSuccess ? (a_oResult as LoginResult).PlayFabId : string.Empty);
 	}
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	#endregion			// 조건부 함수

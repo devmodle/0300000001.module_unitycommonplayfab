@@ -37,6 +37,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		LOAD_SERVER_TIME,
 		LOAD_NOTICES,
 		LOAD_LEADERBOARD,
+		LOAD_APP_DATAS,
 
 		LOAD_CHARACTER_DATAS,
 		LOAD_CHARACTER_ITEMS,
@@ -93,10 +94,6 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 초기화 */
 	public virtual void Init(STParams a_stParams) {
 		CFunc.ShowLog("CPlayfabManager.Init", KCDefine.B_LOG_COLOR_PLUGIN);
-
-		PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest() {
-
-		}, null, null);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 초기화 되었을 경우
@@ -170,6 +167,26 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.Invoke(ref a_oCallback, this, null, false);
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
+
+	/** 앱 데이터를 로드한다 */
+	public void LoadAppDatas(List<string> a_oKeyList, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.LoadAppDatas: {a_oKeyList}", KCDefine.B_LOG_COLOR_PLUGIN);
+
+#if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+		// 로그인 되었을 경우
+		if(this.IsInit && this.IsLogin) {
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_APP_DATAS, a_oCallback);
+
+			PlayFabClientAPI.GetTitleData(new GetTitleDataRequest() {
+				Keys = a_oKeyList
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_APP_DATAS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_APP_DATAS, a_oError));
+		} else {
+			CFunc.Invoke(ref a_oCallback, this, null, false);
+		}
+#else
+		CFunc.Invoke(ref a_oCallback, this, null, false);
+#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+	}
 	#endregion			// 함수
 
 	#region 조건부 함수
@@ -210,7 +227,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 서버 시간 로드 응답을 처리한다 */
 	private void HandleLoadServerTimeResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
 		CFunc.ShowLog($"CPlayfabManager.HandleLoadServerTimeResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_HANDLE_LOAD_SERVER_TIME_RESPONSE_CALLBACK, () => this.ServerTime = a_bIsSuccess ? (a_oResult as GetTimeResult).Time : this.ServerTime);
+		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOAD_SERVER_TIME_CALLBACK, () => this.ServerTime = a_bIsSuccess ? (a_oResult as GetTimeResult).Time : this.ServerTime);
 	}
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	#endregion			// 조건부 함수

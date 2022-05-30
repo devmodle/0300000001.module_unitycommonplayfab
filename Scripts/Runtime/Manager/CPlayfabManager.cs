@@ -6,6 +6,7 @@ using UnityEngine.UI;
 #if PLAYFAB_MODULE_ENABLE
 using PlayFab;
 using PlayFab.ClientModels;
+using PlayFab.SharedModels;
 
 /** 플레이 팹 관리자 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
@@ -20,6 +21,31 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	private enum EPlayfabCallback {
 		NONE = -1,
 		LOGIN,
+
+		SEND_LOG,
+		SEND_APP_LOG,
+		SEND_CHARACTER_LOG,
+
+		BUY_ITEM,
+		BUY_CHARACTER,
+		BUY_CHARACTER_ITEM,
+
+		LOAD_DATAS,
+		LOAD_ITEMS,
+		LOAD_CHARACTERS,
+
+		LOAD_SERVER_TIME,
+		LOAD_LEADERBOARD,
+
+		LOAD_CHARACTER_DATAS,
+		LOAD_CHARACTER_ITEMS,
+
+		SAVE_DATAS,
+		SAVE_CHARACTER_DATAS,
+
+		ADD_NUM_ITEMS,
+		ADD_NUM_CHARACTER_ITEMS,
+
 		[HideInInspector] MAX_VAL
 	}
 
@@ -31,11 +57,14 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#region 변수
 	private STParams m_stParams;
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict01 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
+	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> m_oCallbackDict02 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
+	private Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>> m_oResponseHandlerDict = new Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>>();
 	#endregion			// 변수
 
 	#region 프로퍼티
 	public bool IsInit { get; private set; } = false;
 	public string UserID { get; private set; } = string.Empty;
+	public System.DateTime ServerTime { get; private set; } = System.DateTime.Now;
 
 	public bool IsLogin {
 		get {
@@ -49,6 +78,17 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#endregion			// 프로퍼티
 
 	#region 함수
+	/** 초기화 */
+	public override void Awake() {
+		base.Awake();
+
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.LOGIN, this.HandleLoginResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_LOG, this.HandleSendLogResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_APP_LOG, this.HandleSendAppLogResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_CHARACTER_LOG, this.HandleSendCharacterLogResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.LOAD_SERVER_TIME, this.HandleLoadServerTimeResponse);
+	}
+
 	/** 초기화 */
 	public virtual void Init(STParams a_stParams) {
 		CFunc.ShowLog("CPlayfabManager.Init", KCDefine.B_LOG_COLOR_PLUGIN);
@@ -66,80 +106,40 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
-	/** 로그인을 처리한다 */
-	public void Login(string a_oDeviceID, System.Action<CPlayfabManager, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.Login: {a_oDeviceID}", KCDefine.B_LOG_COLOR_PLUGIN);
-
-#if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
-		if(!this.IsInit || this.IsLogin) {
-			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
-		} else {
-			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
-
-			PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest() {
-				CreateAccount = true, CustomId = a_oDeviceID, TitleId = PlayFabSettings.staticSettings.TitleId
-			}, this.OnLogin, this.OnLoginFail);
-		}
-#else
-		CFunc.Invoke(ref a_oCallback, this, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	}
-
-	/** 애플 로그인을 처리한다 */
-	public void LoginWithApple(string a_oUserID, string a_oIDToken, System.Action<CPlayfabManager, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.LoginWithApple: {a_oUserID}, {a_oIDToken}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oUserID.ExIsValid() && a_oIDToken.ExIsValid());
-
-#if UNITY_IOS && APPLE_LOGIN_ENABLE
-		// 로그인 되었을 경우
-		if(!this.IsInit || this.IsLogin) {
-			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
-		} else {
-			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
-
-			PlayFabClientAPI.LoginWithApple(new LoginWithAppleRequest() {
-				CreateAccount = true, IdentityToken = a_oIDToken, TitleId = PlayFabSettings.staticSettings.TitleId
-			}, this.OnLogin, this.OnLoginFail);
-		}
-#else
-		CFunc.Invoke(ref a_oCallback, this, false);
-#endif			// #if UNITY_IOS && APPLE_LOGIN_ENABLE
-	}
-
-	/** 페이스 북 로그인을 처리한다 */
-	public void LoginWithFacebook(string a_oAccessToken, System.Action<CPlayfabManager, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.LoginWithFacebook: {a_oAccessToken}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oAccessToken.ExIsValid());
-
-#if (UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE
-		// 로그인 되었을 경우
-		if(!this.IsInit || this.IsLogin) {
-			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
-		} else {
-			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
-
-			PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest() {
-				CreateAccount = true, AccessToken = a_oAccessToken, TitleId = PlayFabSettings.staticSettings.TitleId
-			}, this.OnLogin, this.OnLoginFail);
-		}
-#else
-		CFunc.Invoke(ref a_oCallback, this, false);
-#endif			// #if (UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE
-	}
-	
-	/** 로그아웃을 처리한다 */
-	public void Logout(System.Action<CPlayfabManager> a_oCallback) {
-		CFunc.ShowLog("CPlayfabManager.Logout", KCDefine.B_LOG_COLOR_PLUGIN);
-
+	/** 서버 시간을 로드한다 */
+	public void LoadServerTime(System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			PlayFabSettings.staticPlayer.ClientSessionTicket = string.Empty;
-		}
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_SERVER_TIME, a_oCallback);
 
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGOUT_CALLBACK, () => CFunc.Invoke(ref a_oCallback, this));
+			PlayFabClientAPI.GetTime(new GetTimeRequest() {
+				// Do Something
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_SERVER_TIME, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_SERVER_TIME, a_oError));
+		} else {
+			CFunc.Invoke(ref a_oCallback, this, null, false);
+		}
+#else
+		CFunc.Invoke(ref a_oCallback, this, null, false);
+#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+	}
+
+	/** 리더보드를 로드한다 */
+	public void LoadLeaderboard(string a_oStat, int a_nNumStatistics, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback, int a_nSrcIdx = KCDefine.B_VAL_0_INT) {
+#if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+		// 로그인 되었을 경우
+		if(this.IsInit && this.IsLogin) {
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_LEADERBOARD, a_oCallback);
+
+			PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
+				StatisticName = a_oStat, StartPosition = a_nSrcIdx, MaxResultsCount = Mathf.Clamp(a_nNumStatistics, KCDefine.B_VAL_0_INT, KCDefine.U_MAX_NUM_PLAYFAB_M_STATISTICS)
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_LEADERBOARD, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_LEADERBOARD, a_oError));
+		} else {
+			CFunc.Invoke(ref a_oCallback, this, null, false);
+		}
+#else
+		CFunc.Invoke(ref a_oCallback, this, null, false);
+#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 	#endregion			// 함수
 
@@ -147,7 +147,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 초기화 되었을 경우 */
 	private void OnInit() {
-		CFunc.ShowLog("CPlayfabManager.OnInit");
+		CFunc.ShowLog("CPlayfabManager.OnInit", KCDefine.B_LOG_COLOR_PLUGIN);
 
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_INIT_CALLBACK, () => {
 			this.IsInit = true;
@@ -155,16 +155,33 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		});
 	}
 
-	/** 로그인 되었을 경우 */
-	private void OnLogin(LoginResult a_oResult) {
-		CFunc.ShowLog($"CPlayfabManager.OnLogin: {a_oResult.PlayFabId}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGIN_CALLBACK, () => { this.UserID = a_oResult.PlayFabId; m_oCallbackDict01.GetValueOrDefault(EPlayfabCallback.LOGIN)?.Invoke(this, this.IsLogin); });
+	/** 응답을 수신했을 경우 */
+	private void OnReceiveResponse(EPlayfabCallback a_eCallback, PlayFabResultCommon a_oResult) {
+		CFunc.ShowLog($"CPlayfabManager.OnReceiveResponse: {a_eCallback}, {a_oResult.ToJson()}", KCDefine.B_LOG_COLOR_PLUGIN);
+		this.HandleResponse(a_eCallback, a_oResult, true);
+
+		m_oCallbackDict01.GetValueOrDefault(a_eCallback)?.Invoke(this, true);
+		m_oCallbackDict02.GetValueOrDefault(a_eCallback)?.Invoke(this, a_oResult, true);
 	}
 
-	/** 로그인에 실패했을 경우 */
-	private void OnLoginFail(PlayFabError a_oError) {
-		CFunc.ShowLog($"CPlayfabManager.OnLoginFail: {a_oError.ErrorMessage}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGIN_FAIL_CALLBACK, () => { this.UserID = string.Empty; m_oCallbackDict01.GetValueOrDefault(EPlayfabCallback.LOGIN)?.Invoke(this, this.IsLogin); });
+	/** 응답 수신에 실패했을 경우 */
+	private void OnReceiveFailResponse(EPlayfabCallback a_eCallback, PlayFabError a_oError) {
+		CFunc.ShowLog($"CPlayfabManager.OnReceiveFailResponse: {a_eCallback}, {a_oError.ErrorMessage}", KCDefine.B_LOG_COLOR_PLUGIN);
+		this.HandleResponse(a_eCallback, null, false);
+
+		m_oCallbackDict01.GetValueOrDefault(a_eCallback)?.Invoke(this, false);
+		m_oCallbackDict02.GetValueOrDefault(a_eCallback)?.Invoke(this, null, false);
+	}
+
+	/** 응답을 처리한다 */
+	private void HandleResponse(EPlayfabCallback a_eCallback, PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
+		m_oResponseHandlerDict.GetValueOrDefault(a_eCallback)?.Invoke(a_oResult, a_bIsSuccess);
+	}
+
+	/** 서버 시간 로드 응답을 처리한다 */
+	private void HandleLoadServerTimeResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
+		CFunc.ShowLog($"CPlayfabManager.HandleLoadServerTimeResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
+		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_HANDLE_LOAD_SERVER_TIME_RESPONSE_CALLBACK, () => this.ServerTime = a_bIsSuccess ? (a_oResult as GetTimeResult).Time : this.ServerTime);
 	}
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	#endregion			// 조건부 함수

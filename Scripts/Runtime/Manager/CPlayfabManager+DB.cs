@@ -13,7 +13,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 아이템을 구입한다 */
-	private void DoBuyItem(string a_oID, string a_oCharacterID, string a_oCurrency, int a_nPrice, EPlayfabCallback a_eCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+	private void DoBuyItem(string a_oID, string a_oCharacterID, string a_oCurrency, EPlayfabCallback a_eCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 		// 로그인 되었을 경우
@@ -21,7 +21,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			m_oCallbackDict02.ExReplaceVal(a_eCallback, a_oCallback);
 
 			PlayFabClientAPI.PurchaseItem(new PurchaseItemRequest() {
-				ItemId = a_oID, CharacterId = a_oCharacterID, VirtualCurrency = a_oCurrency, Price = a_nPrice
+				ItemId = a_oID, CharacterId = a_oCharacterID, VirtualCurrency = a_oCurrency
 			}, (a_oResponse) => this.OnReceiveResponse(a_eCallback, a_oResponse), (a_oError) => this.OnReceiveFailResponse(a_eCallback, a_oError));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
@@ -35,14 +35,14 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#region 함수
 	/** 아이템을 구입한다 */
-	public void BuyItem(string a_oID, string a_oCurrency, int a_nPrice, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.BuyItem: {a_oID}, {a_oCurrency}, {a_nPrice}", KCDefine.B_LOG_COLOR_PLUGIN);
+	public void BuyItem(string a_oID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.BuyItem: {a_oID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			this.DoBuyItem(a_oID, string.Empty, a_oCurrency, a_nPrice, EPlayfabCallback.BUY_ITEM, a_oCallback);
+			this.DoBuyItem(a_oID, string.Empty, a_oCurrency, EPlayfabCallback.BUY_ITEM, a_oCallback);
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
@@ -52,15 +52,15 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	}
 
 	/** 캐릭터를 구입한다 */
-	public void BuyCharacter(string a_oID, string a_oCurrency, int a_nPrice, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.BuyCharacter: {a_oID}, {a_oCurrency}, {a_nPrice}", KCDefine.B_LOG_COLOR_PLUGIN);
+	public void BuyCharacter(string a_oID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.BuyCharacter: {a_oID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.BUY_CHARACTER, a_oCallback);
-			this.BuyItem(a_oID, a_oCurrency, a_nPrice, (a_oSender, a_oResult, a_bIsSuccess) => this.OnBuyCharacter(a_oResult, a_bIsSuccess));
+			this.BuyItem(a_oID, a_oCurrency, (a_oSender, a_oResult, a_bIsSuccess) => this.OnBuyCharacter(a_oResult, a_bIsSuccess));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
@@ -173,14 +173,14 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#region 함수
 	/** 캐릭터 아이템을 구입한다 */
-	public void BuyCharacterItem(string a_oID, string a_oCharacterID, string a_oCurrency, int a_nPrice, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.BuyCharacterItem: {a_oID}, {a_oCharacterID}, {a_oCurrency}, {a_nPrice}", KCDefine.B_LOG_COLOR_PLUGIN);
+	public void BuyCharacterItem(string a_oID, string a_oCharacterID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.BuyCharacterItem: {a_oID}, {a_oCharacterID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CAccess.Assert(a_oID.ExIsValid() && a_oCharacterID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 구입 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			this.DoBuyItem(a_oID, a_oCharacterID, a_oCurrency, a_nPrice, EPlayfabCallback.BUY_CHARACTER_ITEM, a_oCallback);
+			this.DoBuyItem(a_oID, a_oCharacterID, a_oCurrency, EPlayfabCallback.BUY_CHARACTER_ITEM, a_oCallback);
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}

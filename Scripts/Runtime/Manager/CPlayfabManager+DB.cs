@@ -34,15 +34,15 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 /** 플레이 팹 관리자 - 유저 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#region 함수
-	/** 아이템을 구입한다 */
-	public void BuyItem(string a_oID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.BuyItem: {a_oID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
+	/** 유저 아이템을 구입한다 */
+	public void BuyUserItem(string a_oID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.BuyUserItem: {a_oID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			this.DoBuyItem(a_oID, string.Empty, a_oCurrency, EPlayfabCallback.BUY_ITEM, a_oCallback);
+			this.DoBuyItem(a_oID, string.Empty, a_oCurrency, EPlayfabCallback.BUY_USER_ITEM, a_oCallback);
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
@@ -51,16 +51,16 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
-	/** 캐릭터를 구입한다 */
-	public void BuyCharacter(string a_oID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.BuyCharacter: {a_oID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
+	/** 유저 캐릭터를 구입한다 */
+	public void BuyUserCharacter(string a_oID, string a_oName, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.BuyUserCharacter: {a_oID}, {a_oName}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.BUY_CHARACTER, a_oCallback);
-			this.BuyItem(a_oID, a_oCurrency, (a_oSender, a_oResult, a_bIsSuccess) => this.OnBuyCharacter(a_oResult, a_bIsSuccess));
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.BUY_USER_CHARACTER, a_oCallback);
+			this.BuyUserItem(a_oID, a_oCurrency, (a_oSender, a_oResult, a_bIsSuccess) => this.OnBuyCharacter(a_oResult, a_oName, a_bIsSuccess));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
@@ -69,18 +69,18 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
-	/** 데이터를 로드한다 */
-	public void LoadDatas(List<string> a_oKeyList, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.LoadDatas: {a_oKeyList}", KCDefine.B_LOG_COLOR_PLUGIN);
+	/** 유저 데이터를 로드한다 */
+	public void LoadUserDatas(List<string> a_oKeyList, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.LoadUserDatas: {a_oKeyList}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_DATAS, a_oCallback);
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_USER_DATAS, a_oCallback);
 
 			PlayFabClientAPI.GetUserData(new GetUserDataRequest() {
 				PlayFabId = this.UserID, Keys = a_oKeyList
-			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_DATAS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_DATAS, a_oError));
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_USER_DATAS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_USER_DATAS, a_oError));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
@@ -89,18 +89,18 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
-	/** 아이템을 로드한다 */
-	public void LoadItems(System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog("CPlayfabManager.LoadItems", KCDefine.B_LOG_COLOR_PLUGIN);
+	/** 유저 아이템을 로드한다 */
+	public void LoadUserItems(System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog("CPlayfabManager.LoadUserItems", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_ITEMS, a_oCallback);
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_USER_ITEMS, a_oCallback);
 
 			PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest() {
 				// Do Something
-			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_ITEMS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_ITEMS, a_oError));
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_USER_ITEMS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_USER_ITEMS, a_oError));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
@@ -109,18 +109,18 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
-	/** 캐릭터를 로드한다 */
-	public void LoadCharacters(System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog("CPlayfabManager.LoadCharacters", KCDefine.B_LOG_COLOR_PLUGIN);
+	/** 유저 캐릭터를 로드한다 */
+	public void LoadUserCharacters(System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog("CPlayfabManager.LoadUserCharacters", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_CHARACTERS, a_oCallback);
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_USER_CHARACTERS, a_oCallback);
 
 			PlayFabClientAPI.GetAllUsersCharacters(new ListUsersCharactersRequest() {
 				PlayFabId = this.UserID
-			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_CHARACTERS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_CHARACTERS, a_oError));
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_USER_CHARACTERS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_USER_CHARACTERS, a_oError));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
@@ -129,18 +129,38 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
-	/** 데이터를 저장한다 */
-	public void SaveDatas(Dictionary<string, string> a_oDataDict, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.SaveDatas: {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
+	/** 유저 세그먼트를 로드한다 */
+	public void LoadUserSegments(System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog("CPlayfabManager.LoadUserSegments", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.SAVE_DATAS, a_oCallback);
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_USER_SEGMENTS, a_oCallback);
+
+			PlayFabClientAPI.GetPlayerSegments(new GetPlayerSegmentsRequest() {
+				// Do Something
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_USER_SEGMENTS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_USER_SEGMENTS, a_oError));
+		} else {
+			CFunc.Invoke(ref a_oCallback, this, null, false);
+		}
+#else
+		CFunc.Invoke(ref a_oCallback, this, null, false);
+#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+	}
+
+	/** 유저 데이터를 저장한다 */
+	public void SaveUserDatas(Dictionary<string, string> a_oDataDict, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.SaveUserDatas: {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
+
+#if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+		// 로그인 되었을 경우
+		if(this.IsInit && this.IsLogin) {
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.SAVE_USER_DATAS, a_oCallback);
 
 			PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest() {
 				Data = a_oDataDict, Permission = UserDataPermission.Private
-			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SAVE_DATAS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SAVE_DATAS, a_oError));
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SAVE_USER_DATAS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SAVE_USER_DATAS, a_oError));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
@@ -153,16 +173,16 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 캐릭터를 구입했을 경우 */
-	private void OnBuyCharacter(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
-		CFunc.ShowLog($"CPlayfabManager.OnBuyCharacter: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
-
+	private void OnBuyCharacter(PlayFabResultCommon a_oResult, string a_oName, bool a_bIsSuccess) {
+		CFunc.ShowLog($"CPlayfabManager.OnBuyCharacter: {a_oName}, {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
+		
 		// 구입 되었을 경우
-		if(this.IsInit && this.IsLogin && a_bIsSuccess) {
+		if(a_bIsSuccess) {
 			PlayFabClientAPI.GrantCharacterToUser(new GrantCharacterToUserRequest() {
-				ItemId = (a_oResult as PurchaseItemResult).Items[KCDefine.B_VAL_0_INT].ItemId
-			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.BUY_CHARACTER, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.BUY_CHARACTER, a_oError));
+				ItemId = (a_oResult as PurchaseItemResult).Items[KCDefine.B_VAL_0_INT].ItemId, CharacterName = a_oName
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.BUY_USER_CHARACTER, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.BUY_USER_CHARACTER, a_oError));
 		} else {
-			m_oCallbackDict02.GetValueOrDefault(EPlayfabCallback.BUY_CHARACTER)?.Invoke(this, null, false);
+			m_oCallbackDict02.GetValueOrDefault(EPlayfabCallback.BUY_USER_CHARACTER)?.Invoke(this, null, false);
 		}
 	}
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE

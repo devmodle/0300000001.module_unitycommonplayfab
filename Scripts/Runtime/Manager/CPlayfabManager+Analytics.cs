@@ -18,22 +18,22 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest() {
+			PlayFabClientAPI.WriteTitleEvent(new WriteTitleEventRequest() {
 				EventName = a_oName, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_LOG, a_oError));
 		}
 #endif			// #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 	}
 
-	/** 앱 로그를 전송한다 */
-	public void SendAppLog(string a_oName, Dictionary<string, object> a_oDataDict) {
-		CFunc.ShowLog($"CPlayfabManager.SendAppLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
+	/** 유저 로그를 전송한다 */
+	public void SendUserLog(string a_oName, Dictionary<string, object> a_oDataDict) {
+		CFunc.ShowLog($"CPlayfabManager.SendUserLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			PlayFabClientAPI.WriteTitleEvent(new WriteTitleEventRequest() {
+			PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest() {
 				EventName = a_oName, Body = a_oDataDict
-			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_APP_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_APP_LOG, a_oError));
+			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_USER_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_USER_LOG, a_oError));
 		}
 	}
 
@@ -59,9 +59,9 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.HandleSendLogResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 	}
 
-	/** 앱 로그 전송 응답을 처리한다 */
-	private void HandleSendAppLogResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
-		CFunc.ShowLog($"CPlayfabManager.HandleSendAppLogResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
+	/** 유저 로그 전송 응답을 처리한다 */
+	private void HandleSendUserLogResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
+		CFunc.ShowLog($"CPlayfabManager.HandleSendUserLogResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 	}
 
 	/** 캐릭터 로그 전송 응답을 처리한다 */

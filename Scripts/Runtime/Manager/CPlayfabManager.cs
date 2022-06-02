@@ -30,7 +30,6 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		LOAD_USER_DATAS,
 		LOAD_USER_ITEMS,
 		LOAD_USER_CHARACTERS,
-		LOAD_USER_SEGMENTS,
 
 		LOAD_CHARACTER_DATAS,
 		LOAD_CHARACTER_ITEMS,
@@ -109,26 +108,6 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	}
-
-	/** 데이터를 로드한다 */
-	public void LoadDatas(List<string> a_oKeyList, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.LoadDatas: {a_oKeyList}", KCDefine.B_LOG_COLOR_PLUGIN);
-
-#if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
-		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_DATAS, a_oCallback);
-
-			PlayFabClientAPI.GetTitleData(new GetTitleDataRequest() {
-				Keys = a_oKeyList
-			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOAD_DATAS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOAD_DATAS, a_oError));
-		} else {
-			CFunc.Invoke(ref a_oCallback, this, null, false);
-		}
-#else
-		CFunc.Invoke(ref a_oCallback, this, null, false);
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 

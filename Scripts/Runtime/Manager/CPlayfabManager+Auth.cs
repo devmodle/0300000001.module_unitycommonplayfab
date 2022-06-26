@@ -89,14 +89,16 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	public void Logout(System.Action<CPlayfabManager> a_oCallback) {
 		CFunc.ShowLog("CPlayfabManager.Logout", KCDefine.B_LOG_COLOR_PLUGIN);
 
+		try {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
-		if(this.IsInit && this.IsLogin) {
-			PlayFabSettings.staticPlayer.ClientSessionTicket = string.Empty;
-		}
+			// 로그인 되었을 경우
+			if(this.IsInit && this.IsLogin) {
+				PlayFabSettings.staticPlayer.ClientSessionTicket = string.Empty;
+			}
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGOUT_CALLBACK, () => CFunc.Invoke(ref a_oCallback, this));
+		} finally {
+			CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGOUT_CALLBACK, () => CFunc.Invoke(ref a_oCallback, this));
+		}
 	}
 	#endregion			// 함수
 

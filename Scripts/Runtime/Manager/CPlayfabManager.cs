@@ -59,6 +59,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 	#region 변수
 	private STParams m_stParams;
+	
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict01 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> m_oCallbackDict02 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>> m_oResponseHandlerDict = new Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>>();

@@ -67,8 +67,6 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	}
 
 	#region 변수
-	private STParams m_stParams;
-
 	private Dictionary<EKey, bool> m_oBoolDict = new Dictionary<EKey, bool>() {
 		[EKey.IS_INIT] = false
 	};
@@ -87,6 +85,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#endregion			// 변수
 
 	#region 프로퍼티
+	public STParams Params { get; private set; }
+
 	public bool IsLogin {
 		get {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
@@ -126,7 +126,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		if(m_oBoolDict[EKey.IS_INIT]) {
 			a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, m_oBoolDict[EKey.IS_INIT]);
 		} else {
-			m_stParams = a_stParams;
+			this.Params = a_stParams;
 			this.ExLateCallFunc((a_oSender) => this.OnInit());
 		}
 #else
@@ -203,7 +203,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_INIT_CALLBACK, () => {
 			m_oBoolDict[EKey.IS_INIT] = true;
-			m_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, m_oBoolDict[EKey.IS_INIT]);
+			this.Params.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, m_oBoolDict[EKey.IS_INIT]);
 		});
 	}
 

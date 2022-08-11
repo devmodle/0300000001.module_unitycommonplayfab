@@ -19,7 +19,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 초기화 되었을 경우
-		if(!m_oBoolDict[EKey.IS_INIT] || this.IsLogin) {
+		if(!m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
 			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
@@ -50,7 +50,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS && APPLE_LOGIN_ENABLE
 		// 초기화 되었을 경우
-		if(!m_oBoolDict[EKey.IS_INIT] || this.IsLogin) {
+		if(!m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
 			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
@@ -71,7 +71,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if (UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE
 		// 초기화 되었을 경우
-		if(!m_oBoolDict[EKey.IS_INIT] || this.IsLogin) {
+		if(!m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
 			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
@@ -92,7 +92,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		try {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 			// 로그인 되었을 경우
-			if(m_oBoolDict[EKey.IS_INIT] && this.IsLogin) {
+			if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
 				PlayFabSettings.staticPlayer.ClientSessionTicket = string.Empty;
 			}
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
@@ -107,7 +107,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 로그인 응답을 처리한다 */
 	private void HandleLoginResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
 		CFunc.ShowLog($"CPlayfabManager.HandleLoginResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGIN_CALLBACK, () => m_oStrDict[EKey.USER_ID] = a_bIsSuccess ? (a_oResult as LoginResult).PlayFabId : string.Empty);
+		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGIN_CALLBACK, () => m_oStrDict.ExReplaceVal(EKey.USER_ID, a_bIsSuccess ? (a_oResult as LoginResult).PlayFabId : string.Empty));
 	}
 #endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	#endregion			// 조건부 함수

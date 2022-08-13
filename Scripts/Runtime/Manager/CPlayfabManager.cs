@@ -62,7 +62,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	}
 
 	/** 매개 변수 */
-	public partial struct STParams {
+	public struct STParams {
 		public Dictionary<ECallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict;
 	}
 

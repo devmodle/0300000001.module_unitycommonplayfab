@@ -66,6 +66,16 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		public Dictionary<ECallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict;
 	}
 
+	#region 변수
+	private Dictionary<EKey, bool> m_oBoolDict = new Dictionary<EKey, bool>();
+	private Dictionary<EKey, string> m_oStrDict = new Dictionary<EKey, string>();
+	private Dictionary<EKey, System.DateTime> m_oTimeDict = new Dictionary<EKey, System.DateTime>();
+	
+	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict01 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
+	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> m_oCallbackDict02 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
+	private Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>> m_oResponseHandlerDict = new Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>>();
+	#endregion			// 변수
+
 	#region 프로퍼티
 	public STParams Params { get; private set; }
 
@@ -79,21 +89,12 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 	}
 
-	public bool IsInit => this.BoolDict.GetValueOrDefault(EKey.IS_INIT);
-	public string UserID => this.StrDict.GetValueOrDefault(EKey.USER_ID, string.Empty);
+	public bool IsInit => m_oBoolDict.GetValueOrDefault(EKey.IS_INIT);
+	public string UserID => m_oStrDict.GetValueOrDefault(EKey.USER_ID, string.Empty);
 
 	public System.DateTime ServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME);
 	public System.DateTime PSTServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME).ExToPSTTime();
 	public System.DateTime UTCServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME).ToUniversalTime();
-
-	/** =====> 기타 <===== */
-	private Dictionary<EKey, bool> BoolDict { get; } = new Dictionary<EKey, bool>();
-	private Dictionary<EKey, string> StrDict { get; } = new Dictionary<EKey, string>();
-	private Dictionary<EKey, System.DateTime> TimeDict { get; } = new Dictionary<EKey, System.DateTime>();
-	
-	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> CallbackDict01 { get; } = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
-	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> CallbackDict02 { get; } = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
-	private Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>> ResponseHandlerDict { get; } = new Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>>();
 	#endregion			// 프로퍼티
 
 	#region 함수
@@ -101,11 +102,11 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	public override void Awake() {
 		base.Awake();
 
-		this.ResponseHandlerDict.TryAdd(EPlayfabCallback.LOGIN, this.HandleLoginResponse);
-		this.ResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_LOG, this.HandleSendLogResponse);
-		this.ResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_USER_LOG, this.HandleSendUserLogResponse);
-		this.ResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_CHARACTER_LOG, this.HandleSendCharacterLogResponse);
-		this.ResponseHandlerDict.TryAdd(EPlayfabCallback.LOAD_SERVER_TIME, this.HandleLoadServerTimeResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.LOGIN, this.HandleLoginResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_LOG, this.HandleSendLogResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_USER_LOG, this.HandleSendUserLogResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.SEND_CHARACTER_LOG, this.HandleSendCharacterLogResponse);
+		m_oResponseHandlerDict.TryAdd(EPlayfabCallback.LOAD_SERVER_TIME, this.HandleLoadServerTimeResponse);
 	}
 
 	/** 초기화 */
@@ -114,8 +115,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 초기화 되었을 경우
-		if(this.BoolDict.GetValueOrDefault(EKey.IS_INIT)) {
-			a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, this.BoolDict.GetValueOrDefault(EKey.IS_INIT));
+		if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT)) {
+			a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, m_oBoolDict.GetValueOrDefault(EKey.IS_INIT));
 		} else {
 			this.Params = a_stParams;
 			this.ExLateCallFunc((a_oSender) => this.OnInit());
@@ -131,8 +132,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
-		if(this.BoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
-			this.CallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_NOTICES, a_oCallback);
+		if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_NOTICES, a_oCallback);
 
 			PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest() {
 				Count = Mathf.Clamp(a_nNumNotices, KCDefine.B_VAL_1_INT, KCDefine.U_MAX_NUM_PLAYFAB_M_NOTICES)
@@ -151,8 +152,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
-		if(this.BoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
-			this.CallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_LEADERBOARD, a_oCallback);
+		if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_LEADERBOARD, a_oCallback);
 
 			PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
 				StatisticName = a_oStatisticsName, StartPosition = a_nSrcIdx, MaxResultsCount = Mathf.Clamp(a_nNumStatistics, KCDefine.B_VAL_1_INT, KCDefine.U_MAX_NUM_PLAYFAB_M_STATISTICS)
@@ -171,8 +172,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
-		if(this.BoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
-			this.CallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_SERVER_TIME, a_oCallback);
+		if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
+			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_SERVER_TIME, a_oCallback);
 
 			PlayFabClientAPI.GetTime(new GetTimeRequest() {
 				// Do Something
@@ -193,8 +194,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog("CPlayfabManager.OnInit", KCDefine.B_LOG_COLOR_PLUGIN);
 
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_INIT_CALLBACK, () => {
-			this.BoolDict.ExReplaceVal(EKey.IS_INIT, true);
-			this.Params.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, this.BoolDict.GetValueOrDefault(EKey.IS_INIT));
+			m_oBoolDict.ExReplaceVal(EKey.IS_INIT, true);
+			this.Params.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, m_oBoolDict.GetValueOrDefault(EKey.IS_INIT));
 		});
 	}
 
@@ -203,8 +204,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.OnReceiveResponse: {a_eCallback}, {a_oResult?.ToJson()}", KCDefine.B_LOG_COLOR_PLUGIN);
 		this.HandleResponse(a_eCallback, a_oResult, true);
 
-		this.CallbackDict01.GetValueOrDefault(a_eCallback)?.Invoke(this, true);
-		this.CallbackDict02.GetValueOrDefault(a_eCallback)?.Invoke(this, a_oResult, true);
+		m_oCallbackDict01.GetValueOrDefault(a_eCallback)?.Invoke(this, true);
+		m_oCallbackDict02.GetValueOrDefault(a_eCallback)?.Invoke(this, a_oResult, true);
 	}
 
 	/** 응답 수신에 실패했을 경우 */
@@ -212,13 +213,13 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.OnReceiveFailResponse: {a_eCallback}, {a_oError.ErrorMessage}", KCDefine.B_LOG_COLOR_PLUGIN);
 		this.HandleResponse(a_eCallback, null, false);
 
-		this.CallbackDict01.GetValueOrDefault(a_eCallback)?.Invoke(this, false);
-		this.CallbackDict02.GetValueOrDefault(a_eCallback)?.Invoke(this, null, false);
+		m_oCallbackDict01.GetValueOrDefault(a_eCallback)?.Invoke(this, false);
+		m_oCallbackDict02.GetValueOrDefault(a_eCallback)?.Invoke(this, null, false);
 	}
 
 	/** 응답을 처리한다 */
 	private void HandleResponse(EPlayfabCallback a_eCallback, PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
-		this.ResponseHandlerDict.GetValueOrDefault(a_eCallback)?.Invoke(a_oResult, a_bIsSuccess);
+		m_oResponseHandlerDict.GetValueOrDefault(a_eCallback)?.Invoke(a_oResult, a_bIsSuccess);
 	}
 
 	/** 서버 시간 로드 응답을 처리한다 */

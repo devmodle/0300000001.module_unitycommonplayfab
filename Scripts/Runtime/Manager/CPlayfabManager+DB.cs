@@ -11,7 +11,7 @@ using PlayFab.SharedModels;
 
 /** 플레이 팹 관리자 - 데이터 베이스 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
-	#region 조건부 함수
+#region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 아이템을 구입한다 */
 	private void DoBuyItem(string a_oID, string a_oCharacterID, string a_oCurrency, EPlayfabCallback a_eCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
@@ -28,13 +28,13 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
 		}
 	}
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	#endregion			// 조건부 함수
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endregion         // 조건부 함수                   
 }
 
 /** 플레이 팹 관리자 - 앱 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
-	#region 함수
+#region 함수
 	/** 데이터를 로드한다 */
 	public void LoadDatas(List<string> a_oKeyList, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.LoadDatas: {a_oKeyList}", KCDefine.B_LOG_COLOR_PLUGIN);
@@ -52,14 +52,14 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
-	#endregion			// 함수
+#endregion         // 함수               
 }
 
 /** 플레이 팹 관리자 - 유저 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
-	#region 함수
+#region 함수
 	/** 유저 아이템을 구입한다 */
 	public void BuyUserItem(string a_oID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.BuyUserItem: {a_oID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
@@ -74,7 +74,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 
 	/** 유저 캐릭터를 구입한다 */
@@ -92,7 +92,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 
 	/** 유저 데이터를 로드한다 */
@@ -112,7 +112,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 
 	/** 유저 아이템을 로드한다 */
@@ -132,7 +132,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 
 	/** 유저 캐릭터를 로드한다 */
@@ -152,7 +152,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 	
 	/** 유저 데이터를 저장한다 */
@@ -172,11 +172,11 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
-	#endregion			// 함수
+#endregion         // 함수               
 
-	#region 조건부 함수
+#region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 캐릭터를 구입했을 경우 */
 	private void OnBuyCharacter(PlayFabResultCommon a_oResult, string a_oName, bool a_bIsSuccess) {
@@ -191,13 +191,13 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			m_oCallbackDict02.GetValueOrDefault(EPlayfabCallback.BUY_USER_CHARACTER)?.Invoke(this, null, false);
 		}
 	}
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	#endregion			// 조건부 함수
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endregion         // 조건부 함수                   
 }
 
 /** 플레이 팹 관리자 - 캐릭터 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
-	#region 함수
+#region 함수
 	/** 캐릭터 아이템을 구입한다 */
 	public void BuyCharacterItem(string a_oID, string a_oCharacterID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.BuyCharacterItem: {a_oID}, {a_oCharacterID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
@@ -212,7 +212,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 
 	/** 캐릭터 데이터를 로드한다 */
@@ -245,7 +245,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 
 	/** 캐릭터 데이터를 저장한다 */
@@ -266,7 +266,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 
 	/** 캐릭터 아이템 개수를 추가한다 */
@@ -287,8 +287,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif			// #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
-	#endregion			// 함수
+#endregion         // 함수               
 }
-#endif			// #endif			// #if PLAYFAB_MODULE_ENABLE
+#endif         // #endif			// #if PLAYFAB_MODULE_ENABLE                                                          

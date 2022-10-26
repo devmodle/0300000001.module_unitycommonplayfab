@@ -66,7 +66,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		public Dictionary<ECallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict;
 	}
 
-	#region 변수
+#region 변수
 	private Dictionary<EKey, bool> m_oBoolDict = new Dictionary<EKey, bool>();
 	private Dictionary<EKey, string> m_oStrDict = new Dictionary<EKey, string>();
 	private Dictionary<EKey, System.DateTime> m_oTimeDict = new Dictionary<EKey, System.DateTime>();
@@ -74,9 +74,9 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict01 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> m_oCallbackDict02 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>> m_oResponseHandlerDict = new Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>>();
-	#endregion         // 변수               
+#endregion         // 변수               
 
-	#region 프로퍼티
+#region 프로퍼티
 	public STParams Params { get; private set; }
 
 	public bool IsLogin {
@@ -95,9 +95,9 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	public System.DateTime ServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME);
 	public System.DateTime PSTServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME).ExToPSTTime();
 	public System.DateTime UTCServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME).ToUniversalTime();
-	#endregion         // 프로퍼티                 
+#endregion         // 프로퍼티                 
 
-	#region 함수
+#region 함수
 	/** 초기화 */
 	public override void Awake() {
 		base.Awake();
@@ -185,18 +185,18 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.Invoke(ref a_oCallback, this, null, false);
 #endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
-	#endregion         // 함수               
+#endregion         // 함수               
 
-	#region 클래스 함수
+#region 클래스 함수
 	/** 매개 변수를 생성한다 */
 	public static STParams MakeParams(Dictionary<ECallback, System.Action<CPlayfabManager, bool>> a_oCallbackDict = null) {
 		return new STParams() {
 			m_oCallbackDict = a_oCallbackDict ?? new Dictionary<ECallback, System.Action<CPlayfabManager, bool>>()
 		};
 	}
-	#endregion         // 클래스 함수                   
+#endregion         // 클래스 함수                   
 
-	#region 조건부 함수
+#region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 초기화 되었을 경우 */
 	private void OnInit() {
@@ -237,6 +237,6 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOAD_SERVER_TIME_CALLBACK, () => m_oTimeDict.ExReplaceVal(EKey.SERVER_TIME, a_bIsSuccess ? (a_oResult as GetTimeResult).Time.ToLocalTime() : System.DateTime.Now));
 	}
 #endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
-	#endregion         // 조건부 함수                   
+#endregion         // 조건부 함수                   
 }
 #endif         // #if PLAYFAB_MODULE_ENABLE                                      

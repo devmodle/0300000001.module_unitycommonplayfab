@@ -69,7 +69,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.LoginWithFacebook: {a_oAccessToken}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CAccess.Assert(a_oAccessToken.ExIsValid());
 
-#if(UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE
+#if (UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE
 		// 초기화 되었을 경우
 		if(!m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);

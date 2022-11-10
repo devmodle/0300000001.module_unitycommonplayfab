@@ -16,7 +16,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	public void SendLog(string a_oName, Dictionary<string, object> a_oDataDict) {
 		CFunc.ShowLog($"CPlayfabManager.SendLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
 
-#if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
+#if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 		// 로그인 되었을 경우
 		if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
 			PlayFabClientAPI.WriteTitleEvent(new WriteTitleEventRequest() {
@@ -42,7 +42,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	public void SendCharacterLog(string a_oName, string a_oCharacterID, Dictionary<string, object> a_oDataDict) {
 		CFunc.ShowLog($"CPlayfabManager.SendCharacterLog: {a_oName}, {a_oCharacterID}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
 
-#if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
+#if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 		// 로그인 되었을 경우
 		if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
 			PlayFabClientAPI.WriteCharacterEvent(new WriteClientCharacterEventRequest() {

@@ -23,7 +23,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 				EventName = a_oName, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_LOG, a_oError));
 		}
-#endif         // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)                                                                                                                                              
+#endif // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)                                                                                                                                              
 	}
 
 	/** 유저 로그를 전송한다 */
@@ -49,9 +49,9 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 				EventName = a_oName, CharacterId = a_oCharacterID, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_CHARACTER_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_CHARACTER_LOG, a_oError));
 		}
-#endif         // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)                                                                                                                                              
+#endif // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)                                                                                                                                              
 	}
-#endregion         // 함수               
+#endregion // 함수               
 
 #region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
@@ -69,7 +69,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	private void HandleSendCharacterLogResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
 		CFunc.ShowLog($"CPlayfabManager.HandleSendCharacterLogResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 	}
-#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
-#endregion         // 조건부 함수                   
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endregion // 조건부 함수                   
 }
-#endif         // #if PLAYFAB_MODULE_ENABLE                                      
+#endif // #if PLAYFAB_MODULE_ENABLE                                      

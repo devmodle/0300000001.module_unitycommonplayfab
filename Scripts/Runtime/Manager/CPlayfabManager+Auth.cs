@@ -36,11 +36,11 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest() {
 				CreateAccount = true, CustomId = a_oDeviceID, TitleId = PlayFabSettings.staticSettings.TitleId
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOGIN, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOGIN, a_oError));
-#endif         // #if !UNITY_EDITOR && UNITY_IOS                                           
+#endif // #if !UNITY_EDITOR && UNITY_IOS                                           
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, false);
-#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 	}
 
 	/** 애플 로그인을 처리한다 */
@@ -61,7 +61,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, false);
-#endif         // #if UNITY_IOS && APPLE_LOGIN_ENABLE                                                
+#endif // #if UNITY_IOS && APPLE_LOGIN_ENABLE                                                
 	}
 
 	/** 페이스 북 로그인을 처리한다 */
@@ -82,7 +82,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, false);
-#endif         // #if (UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE                                                                       
+#endif // #if (UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE                                                                       
 	}
 	
 	/** 로그아웃을 처리한다 */
@@ -95,12 +95,12 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
 				PlayFabSettings.staticPlayer.ClientSessionTicket = string.Empty;
 			}
-#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
 		} finally {
 			CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGOUT_CALLBACK, () => CFunc.Invoke(ref a_oCallback, this));
 		}
 	}
-#endregion         // 함수               
+#endregion // 함수               
 
 #region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
@@ -109,7 +109,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.HandleLoginResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGIN_CALLBACK, () => m_oStrDict.ExReplaceVal(EKey.USER_ID, a_bIsSuccess ? (a_oResult as LoginResult).PlayFabId : string.Empty));
 	}
-#endif         // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
-#endregion         // 조건부 함수                   
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endregion // 조건부 함수                   
 }
-#endif         // #if PLAYFAB_MODULE_ENABLE                                      
+#endif // #if PLAYFAB_MODULE_ENABLE                                      

@@ -51,7 +51,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #endif // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)                                                                                                                                              
 	}
-#endregion // 함수               
+#endregion // 함수
 
 #region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
@@ -69,7 +69,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	private void HandleSendCharacterLogResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
 		CFunc.ShowLog($"CPlayfabManager.HandleSendCharacterLogResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 	}
-#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
-#endregion // 조건부 함수                   
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endregion // 조건부 함수
 }
-#endif // #if PLAYFAB_MODULE_ENABLE                                      
+#endif // #if PLAYFAB_MODULE_ENABLE

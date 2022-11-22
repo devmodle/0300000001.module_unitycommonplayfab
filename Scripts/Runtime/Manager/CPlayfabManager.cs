@@ -74,7 +74,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict01 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> m_oCallbackDict02 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>> m_oResponseHandlerDict = new Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>>();
-#endregion // 변수               
+#endregion // 변수
 
 #region 프로퍼티
 	public STParams Params { get; private set; }
@@ -85,7 +85,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			return PlayFabClientAPI.IsClientLoggedIn();
 #else
 			return false;
-#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		}
 	}
 
@@ -95,7 +95,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	public System.DateTime ServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME);
 	public System.DateTime PSTServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME).ExToPSTTime();
 	public System.DateTime UTCServerTime => m_oTimeDict.GetValueOrDefault(EKey.SERVER_TIME).ToUniversalTime();
-#endregion // 프로퍼티                 
+#endregion // 프로퍼티
 
 #region 함수
 	/** 초기화 */
@@ -123,7 +123,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, false);
-#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
 	/** 공지 사항을 로드한다 */
@@ -143,7 +143,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
 	/** 리더보드를 로드한다 */
@@ -163,7 +163,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
 	/** 서버 시간을 로드한다 */
@@ -183,9 +183,9 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #else
 		CFunc.Invoke(ref a_oCallback, this, null, false);
-#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
-#endregion // 함수               
+#endregion // 함수
 
 #region 클래스 함수
 	/** 매개 변수를 생성한다 */
@@ -194,7 +194,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			m_oCallbackDict = a_oCallbackDict ?? new Dictionary<ECallback, System.Action<CPlayfabManager, bool>>()
 		};
 	}
-#endregion // 클래스 함수                   
+#endregion // 클래스 함수
 
 #region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
@@ -236,7 +236,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.HandleLoadServerTimeResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOAD_SERVER_TIME_CALLBACK, () => m_oTimeDict.ExReplaceVal(EKey.SERVER_TIME, a_bIsSuccess ? (a_oResult as GetTimeResult).Time.ToLocalTime() : System.DateTime.Now));
 	}
-#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE                                                               
-#endregion // 조건부 함수                   
+#endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#endregion // 조건부 함수
 }
-#endif // #if PLAYFAB_MODULE_ENABLE                                      
+#endif // #if PLAYFAB_MODULE_ENABLE

@@ -23,7 +23,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 				EventName = a_oName, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_LOG, a_oError));
 		}
-#endif // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)                                                                                                                                              
+#endif // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 	}
 
 	/** 유저 로그를 전송한다 */
@@ -49,7 +49,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 				EventName = a_oName, CharacterId = a_oCharacterID, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_CHARACTER_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_CHARACTER_LOG, a_oError));
 		}
-#endif // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)                                                                                                                                              
+#endif // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 	}
 #endregion // 함수
 

@@ -30,12 +30,14 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	public void SendUserLog(string a_oName, Dictionary<string, object> a_oDataDict) {
 		CFunc.ShowLog($"CPlayfabManager.SendUserLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
 
+#if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 		// 로그인 되었을 경우
 		if(m_oBoolDict.GetValueOrDefault(EKey.IS_INIT) && this.IsLogin) {
 			PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest() {
 				EventName = a_oName, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_USER_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_USER_LOG, a_oError));
 		}
+#endif // #if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 	}
 
 	/** 캐릭터 로그를 전송한다 */

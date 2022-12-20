@@ -1,4 +1,4 @@
-# 0300000001.Module_UnityCommonPlayfab_Client
+# 0300000001.Module_UnityCommonPlayfab
 
 Module - UnityCommonPlayfab 클라이언트 프로젝트
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/9tapmodule.repository/0300000001.module_unitycommonplayfab_client.git
+git remote add origin https://gitlab.com/9tapmodule.repository/0300000001.module_unitycommonplayfab.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/9tapmodule.repository/0300000001.module_unitycommonplayfab_client/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/9tapmodule.repository/0300000001.module_unitycommonplayfab/-/settings/integrations)
 
 ## Collaborate with your team
 

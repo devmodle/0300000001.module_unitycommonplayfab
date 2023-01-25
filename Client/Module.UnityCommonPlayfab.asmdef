@@ -2,14 +2,14 @@
     "name": "Module.UnityCommonPlayfab",
     "rootNamespace": "",
     "references": [
+        "PlayFab",
         "Module.UnityCommonDefine",
         "Module.UnityCommonAccess",
         "Module.UnityCommonFactory",
         "Module.UnityCommonExtension",
         "Module.UnityCommonFunc",
         "Module.UnityCommonUtility",
-        "Module.UnityCommonExternals",
-        "PlayFab"
+        "Module.UnityCommonExternals"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

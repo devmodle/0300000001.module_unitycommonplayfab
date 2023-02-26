@@ -1,6 +1,6 @@
 # 0300000001.Module_UnityCommonPlayfab
 
-Module - UnityCommonPlayfab 클라이언트 프로젝트
+Module - UnityCommonPlayfab 프로젝트
 
 ## Getting started
 

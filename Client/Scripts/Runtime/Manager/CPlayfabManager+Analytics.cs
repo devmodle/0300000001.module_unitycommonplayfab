@@ -11,7 +11,7 @@ using PlayFab.SharedModels;
 
 /** 플레이 팹 관리자 - 분석 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
-#region 함수
+	#region 함수
 	/** 로그를 전송한다 */
 	public void SendLog(string a_oName, Dictionary<string, object> a_oDataDict) {
 		CFunc.ShowLog($"CPlayfabManager.SendLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
@@ -53,9 +53,9 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 #endif // #if ((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 	}
-#endregion // 함수
+	#endregion // 함수
 
-#region 조건부 함수
+	#region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 로그 전송 응답을 처리한다 */
 	private void HandleSendLogResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
@@ -72,6 +72,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.HandleSendCharacterLogResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 	}
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-#endregion // 조건부 함수
+	#endregion // 조건부 함수
 }
 #endif // #if PLAYFAB_MODULE_ENABLE
+

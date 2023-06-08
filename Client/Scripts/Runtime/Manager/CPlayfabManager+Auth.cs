@@ -11,7 +11,7 @@ using PlayFab.SharedModels;
 
 /** 플레이 팹 관리자 - 인증 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
-#region 함수
+	#region 함수
 	/** 로그인을 처리한다 */
 	public void Login(string a_oDeviceID, System.Action<CPlayfabManager, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.Login: {a_oDeviceID}", KCDefine.B_LOG_COLOR_PLUGIN);
@@ -23,7 +23,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
 			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
-			
+
 #if !UNITY_EDITOR && UNITY_IOS
 			PlayFabClientAPI.LoginWithIOSDeviceID(new LoginWithIOSDeviceIDRequest() {
 				CreateAccount = true, DeviceId = a_oDeviceID, DeviceModel = SystemInfo.deviceModel, OS = SystemInfo.operatingSystem, TitleId = PlayFabSettings.staticSettings.TitleId
@@ -84,7 +84,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.Invoke(ref a_oCallback, this, false);
 #endif // #if (UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE
 	}
-	
+
 	/** 로그아웃을 처리한다 */
 	public void Logout(System.Action<CPlayfabManager> a_oCallback) {
 		CFunc.ShowLog("CPlayfabManager.Logout", KCDefine.B_LOG_COLOR_PLUGIN);
@@ -100,9 +100,9 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGOUT_CALLBACK, () => CFunc.Invoke(ref a_oCallback, this));
 		}
 	}
-#endregion // 함수
+	#endregion // 함수
 
-#region 조건부 함수
+	#region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 로그인 응답을 처리한다 */
 	private void HandleLoginResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
@@ -110,6 +110,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGIN_CALLBACK, () => m_oStrDict[EKey.USER_ID] = a_bIsSuccess ? (a_oResult as LoginResult).PlayFabId : string.Empty);
 	}
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-#endregion // 조건부 함수
+	#endregion // 조건부 함수
 }
 #endif // #if PLAYFAB_MODULE_ENABLE
+

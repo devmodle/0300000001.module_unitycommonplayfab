@@ -18,7 +18,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 		// 로그인 되었을 경우
-		if(m_oBoolDict[EKey.IS_INIT] && this.IsLogin) {
+		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WriteTitleEvent(new WriteTitleEventRequest() {
 				EventName = a_oName, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_LOG, a_oError));
@@ -32,7 +32,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 		// 로그인 되었을 경우
-		if(m_oBoolDict[EKey.IS_INIT] && this.IsLogin) {
+		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest() {
 				EventName = a_oName, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_USER_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_USER_LOG, a_oError));
@@ -46,7 +46,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
 		// 로그인 되었을 경우
-		if(m_oBoolDict[EKey.IS_INIT] && this.IsLogin) {
+		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WriteCharacterEvent(new WriteClientCharacterEventRequest() {
 				EventName = a_oName, CharacterId = a_oCharacterID, Body = a_oDataDict
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_CHARACTER_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_CHARACTER_LOG, a_oError));

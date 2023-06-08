@@ -11,15 +11,6 @@ using PlayFab.SharedModels;
 
 /** 플레이 팹 관리자 */
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
-	/** 식별자 */
-	private enum EKey {
-		NONE = -1,
-		IS_INIT,
-		USER_ID,
-		SERVER_TIME,
-		[HideInInspector] MAX_VAL
-	}
-
 	/** 콜백 */
 	public enum ECallback {
 		NONE,
@@ -67,18 +58,6 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	}
 
 	#region 변수
-	private Dictionary<EKey, bool> m_oBoolDict = new Dictionary<EKey, bool>() {
-		[EKey.IS_INIT] = false
-	};
-
-	private Dictionary<EKey, string> m_oStrDict = new Dictionary<EKey, string>() {
-		[EKey.USER_ID] = string.Empty
-	};
-
-	private Dictionary<EKey, System.DateTime> m_oTimeDict = new Dictionary<EKey, System.DateTime>() {
-		[EKey.SERVER_TIME] = System.DateTime.Now
-	};
-
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict01 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> m_oCallbackDict02 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>> m_oResponseHandlerDict = new Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>>();
@@ -86,6 +65,10 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 	#region 프로퍼티
 	public STParams Params { get; private set; }
+
+	public bool IsInit { get; private set; } = false;
+	public string UserID { get; private set; } = string.Empty;
+	public System.DateTime ServerTime { get; private set; } = System.DateTime.Now;
 
 	public bool IsLogin {
 		get {
@@ -97,12 +80,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 	}
 
-	public bool IsInit => m_oBoolDict[EKey.IS_INIT];
-	public string UserID => m_oStrDict[EKey.USER_ID];
-
-	public System.DateTime ServerTime => m_oTimeDict[EKey.SERVER_TIME];
-	public System.DateTime PSTServerTime => m_oTimeDict[EKey.SERVER_TIME].ExToPSTTime();
-	public System.DateTime UTCServerTime => m_oTimeDict[EKey.SERVER_TIME].ToUniversalTime();
+	public System.DateTime PSTServerTime => this.ServerTime.ExToPSTTime();
+	public System.DateTime UTCServerTime => this.ServerTime.ToUniversalTime();
 	#endregion // 프로퍼티
 
 	#region 함수
@@ -123,8 +102,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 초기화 되었을 경우
-		if(m_oBoolDict[EKey.IS_INIT]) {
-			a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, m_oBoolDict[EKey.IS_INIT]);
+		if(this.IsInit) {
+			a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, this.IsInit);
 		} else {
 			this.Params = a_stParams;
 			this.ExLateCallFunc((a_oSender) => this.OnInit());
@@ -140,7 +119,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
-		if(m_oBoolDict[EKey.IS_INIT] && this.IsLogin) {
+		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_NOTICES, a_oCallback);
 
 			PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest() {
@@ -160,7 +139,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
-		if(m_oBoolDict[EKey.IS_INIT] && this.IsLogin) {
+		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_LEADERBOARD, a_oCallback);
 
 			PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
@@ -180,7 +159,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
-		if(m_oBoolDict[EKey.IS_INIT] && this.IsLogin) {
+		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_SERVER_TIME, a_oCallback);
 
 			PlayFabClientAPI.GetTime(new GetTimeRequest() {
@@ -202,8 +181,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog("CPlayfabManager.OnInit", KCDefine.B_LOG_COLOR_PLUGIN);
 
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_INIT_CALLBACK, () => {
-			m_oBoolDict[EKey.IS_INIT] = true;
-			this.Params.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, m_oBoolDict[EKey.IS_INIT]);
+			this.IsInit = true;
+			this.Params.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, this.IsInit);
 		});
 	}
 
@@ -233,7 +212,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 서버 시간 로드 응답을 처리한다 */
 	private void HandleLoadServerTimeResponse(PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
 		CFunc.ShowLog($"CPlayfabManager.HandleLoadServerTimeResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOAD_SERVER_TIME_CALLBACK, () => m_oTimeDict[EKey.SERVER_TIME] = a_bIsSuccess ? (a_oResult as GetTimeResult).Time.ToLocalTime() : System.DateTime.Now);
+		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOAD_SERVER_TIME_CALLBACK, () => this.ServerTime = a_bIsSuccess ? (a_oResult as GetTimeResult).Time.ToLocalTime() : System.DateTime.Now);
 	}
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	#endregion // 조건부 함수

@@ -22,7 +22,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		if(!this.IsInit || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
-			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
+			m_oCallbackDictA.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
 
 #if !UNITY_EDITOR && UNITY_IOS
 			PlayFabClientAPI.LoginWithIOSDeviceID(new LoginWithIOSDeviceIDRequest() {
@@ -53,7 +53,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		if(!this.IsInit || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
-			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
+			m_oCallbackDictA.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
 
 			PlayFabClientAPI.LoginWithApple(new LoginWithAppleRequest() {
 				CreateAccount = true, IdentityToken = a_oIDToken, TitleId = PlayFabSettings.staticSettings.TitleId
@@ -74,7 +74,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		if(!this.IsInit || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
-			m_oCallbackDict01.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
+			m_oCallbackDictA.ExReplaceVal(EPlayfabCallback.LOGIN, a_oCallback);
 
 			PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest() {
 				CreateAccount = true, AccessToken = a_oAccessToken, TitleId = PlayFabSettings.staticSettings.TitleId

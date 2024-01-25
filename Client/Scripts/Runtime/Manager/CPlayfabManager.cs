@@ -58,8 +58,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	}
 
 	#region 변수
-	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> m_oCallbackDict01 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
-	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> m_oCallbackDict02 = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
+	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>> m_oCallbackDictA = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, bool>>();
+	private Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>> m_oCallbackDictB = new Dictionary<EPlayfabCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool>>();
 	private Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>> m_oResponseHandlerDict = new Dictionary<EPlayfabCallback, System.Action<PlayFabResultCommon, bool>>();
 	#endregion // 변수
 
@@ -120,7 +120,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_NOTICES, a_oCallback);
+			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_NOTICES, a_oCallback);
 
 			PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest() {
 				Count = Mathf.Clamp(a_nNumNotices, KCDefine.B_VAL_1_INT, KCDefine.U_MAX_NUM_PLAYFAB_M_NOTICES)
@@ -140,7 +140,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_LEADERBOARD, a_oCallback);
+			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_LEADERBOARD, a_oCallback);
 
 			PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
 				StatisticName = a_oStatisticsName, StartPosition = a_nSrcIdx, MaxResultsCount = Mathf.Clamp(a_nNumStatistics, KCDefine.B_VAL_1_INT, KCDefine.U_MAX_NUM_PLAYFAB_M_STATISTICS)
@@ -160,7 +160,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인 되었을 경우
 		if(this.IsInit && this.IsLogin) {
-			m_oCallbackDict02.ExReplaceVal(EPlayfabCallback.LOAD_SERVER_TIME, a_oCallback);
+			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_SERVER_TIME, a_oCallback);
 
 			PlayFabClientAPI.GetTime(new GetTimeRequest() {
 				// Do Something
@@ -191,8 +191,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.OnReceiveResponse: {a_eCallback}, {a_oResult?.ToJson()}", KCDefine.B_LOG_COLOR_PLUGIN);
 		this.HandleResponse(a_eCallback, a_oResult, true);
 
-		m_oCallbackDict01.GetValueOrDefault(a_eCallback)?.Invoke(this, true);
-		m_oCallbackDict02.GetValueOrDefault(a_eCallback)?.Invoke(this, a_oResult, true);
+		m_oCallbackDictA.GetValueOrDefault(a_eCallback)?.Invoke(this, true);
+		m_oCallbackDictB.GetValueOrDefault(a_eCallback)?.Invoke(this, a_oResult, true);
 	}
 
 	/** 응답 수신에 실패했을 경우 */
@@ -200,8 +200,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.OnReceiveFailResponse: {a_eCallback}, {a_oError.ErrorMessage}", KCDefine.B_LOG_COLOR_PLUGIN);
 		this.HandleResponse(a_eCallback, null, false);
 
-		m_oCallbackDict01.GetValueOrDefault(a_eCallback)?.Invoke(this, false);
-		m_oCallbackDict02.GetValueOrDefault(a_eCallback)?.Invoke(this, null, false);
+		m_oCallbackDictA.GetValueOrDefault(a_eCallback)?.Invoke(this, false);
+		m_oCallbackDictB.GetValueOrDefault(a_eCallback)?.Invoke(this, null, false);
 	}
 
 	/** 응답을 처리한다 */

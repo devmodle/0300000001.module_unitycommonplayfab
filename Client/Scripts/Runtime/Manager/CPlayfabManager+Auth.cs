@@ -18,7 +18,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oDeviceID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(!this.IsInit || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
@@ -49,7 +49,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oUserID.ExIsValid() && a_oIDToken.ExIsValid());
 
 #if UNITY_IOS && APPLE_LOGIN_ENABLE
-		// 초기화 되었을 경우
+		// 초기화되었을 경우
 		if(!this.IsInit || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
@@ -70,7 +70,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oAccessToken.ExIsValid());
 
 #if(UNITY_IOS || UNITY_ANDROID) && FACEBOOK_MODULE_ENABLE
-		// 초기화 되었을 경우
+		// 초기화되었을 경우
 		if(!this.IsInit || this.IsLogin) {
 			CFunc.Invoke(ref a_oCallback, this, this.IsLogin);
 		} else {
@@ -91,7 +91,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 		try {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-			// 로그인 되었을 경우
+			// 로그인되었을 경우
 			if(this.IsInit && this.IsLogin) {
 				PlayFabSettings.staticPlayer.ClientSessionTicket = string.Empty;
 			}

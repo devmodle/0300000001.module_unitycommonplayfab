@@ -17,7 +17,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	private void DoBuyItem(string a_oID, string a_oCharacterID, string a_oCurrency, EPlayfabCallback a_eCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(a_eCallback, a_oCallback);
 
@@ -40,7 +40,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.LoadDatas: {a_oKeyList}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_DATAS, a_oCallback);
 
@@ -66,7 +66,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			this.DoBuyItem(a_oID, string.Empty, a_oCurrency, EPlayfabCallback.BUY_USER_ITEM, a_oCallback);
 		} else {
@@ -83,7 +83,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.BUY_USER_CHARACTER, a_oCallback);
 			this.BuyUserItem(a_oID, a_oCurrency, (a_oSender, a_oResult, a_bIsSuccess) => this.OnBuyCharacter(a_oResult, a_oName, a_bIsSuccess));
@@ -100,7 +100,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.LoadUserDatas: {a_oKeyList}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_USER_DATAS, a_oCallback);
 
@@ -120,7 +120,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog("CPlayfabManager.LoadUserItems", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_USER_ITEMS, a_oCallback);
 
@@ -140,7 +140,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog("CPlayfabManager.LoadUserCharacters", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_USER_CHARACTERS, a_oCallback);
 
@@ -160,7 +160,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.SaveUserDatas: {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.SAVE_USER_DATAS, a_oCallback);
 
@@ -182,7 +182,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	private void OnBuyCharacter(PlayFabResultCommon a_oResult, string a_oName, bool a_bIsSuccess) {
 		CFunc.ShowLog($"CPlayfabManager.OnBuyCharacter: {a_oName}, {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 
-		// 구입 되었을 경우
+		// 구입되었을 경우
 		if(a_bIsSuccess) {
 			PlayFabClientAPI.GrantCharacterToUser(new GrantCharacterToUserRequest() {
 				ItemId = (a_oResult as PurchaseItemResult).Items[KCDefine.B_VAL_0_INT].ItemId, CharacterName = a_oName
@@ -204,7 +204,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oID.ExIsValid() && a_oCharacterID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 구입 되었을 경우
+		// 구입되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			this.DoBuyItem(a_oID, a_oCharacterID, a_oCurrency, EPlayfabCallback.BUY_CHARACTER_ITEM, a_oCallback);
 		} else {
@@ -233,7 +233,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oCharacterID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_CHARACTER_ITEMS, a_oCallback);
 
@@ -254,7 +254,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oCharacterID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.SAVE_CHARACTER_DATAS, a_oCallback);
 
@@ -275,7 +275,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CAccess.Assert(a_oID.ExIsValid() && a_oCharacterID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.ADD_NUM_ITEMS, a_oCallback);
 

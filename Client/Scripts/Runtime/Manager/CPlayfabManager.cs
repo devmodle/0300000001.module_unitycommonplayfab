@@ -101,7 +101,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog("CPlayfabManager.Init", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 초기화 되었을 경우
+		// 초기화되었을 경우
 		if(this.IsInit) {
 			a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, this.IsInit);
 		} else {
@@ -118,7 +118,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.LoadNotices: {a_nNumNotices}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_NOTICES, a_oCallback);
 
@@ -138,7 +138,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.LoadLeaderboard: {a_nSrcIdx}, {a_nNumStatistics}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_LEADERBOARD, a_oCallback);
 
@@ -158,7 +158,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog("CPlayfabManager.LoadServerTime", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_SERVER_TIME, a_oCallback);
 
@@ -176,7 +176,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 	#region 조건부 함수
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	/** 초기화 되었을 경우 */
+	/** 초기화되었을 경우 */
 	private void OnInit() {
 		CFunc.ShowLog("CPlayfabManager.OnInit", KCDefine.B_LOG_COLOR_PLUGIN);
 

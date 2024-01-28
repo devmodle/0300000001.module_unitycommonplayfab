@@ -17,7 +17,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.SendLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WriteTitleEvent(new WriteTitleEventRequest() {
 				EventName = a_oName, Body = a_oDataDict
@@ -31,7 +31,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.SendUserLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest() {
 				EventName = a_oName, Body = a_oDataDict
@@ -45,7 +45,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.SendCharacterLog: {a_oName}, {a_oCharacterID}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if((UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE) && PLAYFAB_ANALYTICS_ENABLE) && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD)
-		// 로그인 되었을 경우
+		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WriteCharacterEvent(new WriteClientCharacterEventRequest() {
 				EventName = a_oName, CharacterId = a_oCharacterID, Body = a_oDataDict

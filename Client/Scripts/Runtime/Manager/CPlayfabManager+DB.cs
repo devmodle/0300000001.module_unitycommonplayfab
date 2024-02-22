@@ -15,7 +15,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	/** 아이템을 구입한다 */
 	private void DoBuyItem(string a_oID, string a_oCharacterID, string a_oCurrency, EPlayfabCallback a_eCallback, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
+		CFunc.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
@@ -63,7 +63,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 유저 아이템을 구입한다 */
 	public void BuyUserItem(string a_oID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.BuyUserItem: {a_oID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
+		CFunc.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인되었을 경우
@@ -80,7 +80,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 유저 캐릭터를 구입한다 */
 	public void BuyUserCharacter(string a_oID, string a_oName, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.BuyUserCharacter: {a_oID}, {a_oName}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
+		CFunc.Assert(a_oID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인되었을 경우
@@ -201,7 +201,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 캐릭터 아이템을 구입한다 */
 	public void BuyCharacterItem(string a_oID, string a_oCharacterID, string a_oCurrency, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.BuyCharacterItem: {a_oID}, {a_oCharacterID}, {a_oCurrency}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oID.ExIsValid() && a_oCharacterID.ExIsValid() && a_oCurrency.ExIsValid());
+		CFunc.Assert(a_oID.ExIsValid() && a_oCharacterID.ExIsValid() && a_oCurrency.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 구입되었을 경우
@@ -218,7 +218,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 캐릭터 데이터를 로드한다 */
 	public void LoadCharacterDatas(string a_oCharacterID, List<string> a_oKeyList, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.LoadCharacterDatas: {a_oCharacterID}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oCharacterID.ExIsValid());
+		CFunc.Assert(a_oCharacterID.ExIsValid());
 
 		m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.LOAD_CHARACTER_DATAS, a_oCallback);
 
@@ -230,7 +230,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 캐릭터 아이템을 로드한다 */
 	public void LoadCharacterItems(string a_oCharacterID, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.LoadCharacterItems: {a_oCharacterID}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oCharacterID.ExIsValid());
+		CFunc.Assert(a_oCharacterID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인되었을 경우
@@ -251,7 +251,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 캐릭터 데이터를 저장한다 */
 	public void SaveCharacterDatas(string a_oCharacterID, Dictionary<string, string> a_oDataDict, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.SaveCharacterDatas: {a_oCharacterID}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oCharacterID.ExIsValid());
+		CFunc.Assert(a_oCharacterID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인되었을 경우
@@ -272,7 +272,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 캐릭터 아이템 개수를 추가한다 */
 	public void AddNumCharacterItems(string a_oID, string a_oCharacterID, int a_nNumItems, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.AddNumCharacterItems: {a_oID}, {a_oCharacterID}, {a_nNumItems}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oID.ExIsValid() && a_oCharacterID.ExIsValid());
+		CFunc.Assert(a_oID.ExIsValid() && a_oCharacterID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인되었을 경우

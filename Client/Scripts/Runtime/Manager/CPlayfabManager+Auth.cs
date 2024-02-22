@@ -15,7 +15,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 로그인을 처리한다 */
 	public void Login(string a_oDeviceID, System.Action<CPlayfabManager, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.Login: {a_oDeviceID}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oDeviceID.ExIsValid());
+		CFunc.Assert(a_oDeviceID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인되었을 경우
@@ -46,7 +46,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 애플 로그인을 처리한다 */
 	public void LoginWithApple(string a_oUserID, string a_oIDToken, System.Action<CPlayfabManager, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.LoginWithApple: {a_oUserID}, {a_oIDToken}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oUserID.ExIsValid() && a_oIDToken.ExIsValid());
+		CFunc.Assert(a_oUserID.ExIsValid() && a_oIDToken.ExIsValid());
 
 #if APPLE_LOGIN_ENABLE && UNITY_IOS
 		// 초기화되었을 경우
@@ -67,7 +67,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	/** 페이스 북 로그인을 처리한다 */
 	public void LoginWithFacebook(string a_oAccessToken, System.Action<CPlayfabManager, bool> a_oCallback) {
 		CFunc.ShowLog($"CPlayfabManager.LoginWithFacebook: {a_oAccessToken}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CAccess.Assert(a_oAccessToken.ExIsValid());
+		CFunc.Assert(a_oAccessToken.ExIsValid());
 
 #if FACEBOOK_MODULE_ENABLE && (UNITY_IOS || UNITY_ANDROID)
 		// 초기화되었을 경우

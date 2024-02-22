@@ -103,13 +103,13 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 초기화되었을 경우
 		if(this.IsInit) {
-			a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, this.IsInit);
+			a_stParams.m_oCallbackDict?.ExGetVal(ECallback.INIT)?.Invoke(this, this.IsInit);
 		} else {
 			this.Params = a_stParams;
 			this.ExLateCallFunc((a_oSender) => this.OnInit());
 		}
 #else
-		a_stParams.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, false);
+		a_stParams.m_oCallbackDict?.ExGetVal(ECallback.INIT)?.Invoke(this, false);
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 	}
 
@@ -182,7 +182,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_INIT_CALLBACK, () => {
 			this.IsInit = true;
-			this.Params.m_oCallbackDict?.GetValueOrDefault(ECallback.INIT)?.Invoke(this, this.IsInit);
+			this.Params.m_oCallbackDict?.ExGetVal(ECallback.INIT)?.Invoke(this, this.IsInit);
 		});
 	}
 
@@ -206,7 +206,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 	/** 응답을 처리한다 */
 	private void HandleResponse(EPlayfabCallback a_eCallback, PlayFabResultCommon a_oResult, bool a_bIsSuccess) {
-		m_oResponseHandlerDict.GetValueOrDefault(a_eCallback)?.Invoke(a_oResult, a_bIsSuccess);
+		m_oResponseHandlerDict.ExGetVal(a_eCallback)?.Invoke(a_oResult, a_bIsSuccess);
 	}
 
 	/** 서버 시간 로드 응답을 처리한다 */

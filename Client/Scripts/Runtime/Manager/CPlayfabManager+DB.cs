@@ -29,7 +29,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 	}
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	#endregion // 조건부 함수
+#endregion // 조건부 함수
 }
 
 /** 플레이 팹 관리자 - 앱 */
@@ -192,7 +192,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 	}
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	#endregion // 조건부 함수
+#endregion // 조건부 함수
 }
 
 /** 플레이 팹 관리자 - 캐릭터 */

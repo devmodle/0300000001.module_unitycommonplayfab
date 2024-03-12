@@ -72,7 +72,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CFunc.ShowLog($"CPlayfabManager.HandleSendCharacterLogResponse: {a_bIsSuccess}", KCDefine.B_LOG_COLOR_PLUGIN);
 	}
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	#endregion // 조건부 함수
+#endregion // 조건부 함수
 }
 #endif // #if PLAYFAB_MODULE_ENABLE
 

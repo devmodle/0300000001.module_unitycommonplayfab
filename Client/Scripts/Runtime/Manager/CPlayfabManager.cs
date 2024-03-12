@@ -215,7 +215,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOAD_SERVER_TIME_CALLBACK, () => this.ServerTime = a_bIsSuccess ? (a_oResult as GetTimeResult).Time.ToLocalTime() : System.DateTime.Now);
 	}
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	#endregion // 조건부 함수
+#endregion // 조건부 함수
 }
 
 /** 플레이 팹 관리자 - 팩토리 */

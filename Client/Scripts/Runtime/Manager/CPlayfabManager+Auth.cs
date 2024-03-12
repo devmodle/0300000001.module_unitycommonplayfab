@@ -110,7 +110,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		CScheduleManager.Inst.AddCallback(KCDefine.U_KEY_PLAYFAB_M_LOGIN_CALLBACK, () => this.UserID = a_bIsSuccess ? (a_oResult as LoginResult).PlayFabId : string.Empty);
 	}
 #endif // #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-	#endregion // 조건부 함수
+#endregion // 조건부 함수
 }
 #endif // #if PLAYFAB_MODULE_ENABLE
 

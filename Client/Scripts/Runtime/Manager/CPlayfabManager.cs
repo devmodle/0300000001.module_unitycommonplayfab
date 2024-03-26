@@ -80,7 +80,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 		}
 	}
 
-	public System.DateTime PSTServerTime => this.ServerTime.ExToPSTTime();
+	public System.DateTime PSTServerTime => this.ServerTime.ExToTimePST();
 	public System.DateTime UTCServerTime => this.ServerTime.ToUniversalTime();
 	#endregion // 프로퍼티
 

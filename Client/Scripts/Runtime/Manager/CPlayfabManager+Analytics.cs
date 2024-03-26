@@ -13,42 +13,42 @@ using PlayFab.SharedModels;
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#region 함수
 	/** 로그를 전송한다 */
-	public void SendLog(string a_oName, Dictionary<string, object> a_oDataDict) {
-		CFunc.ShowLog($"CPlayfabManager.SendLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
+	public void SendLog(string a_oName, Dictionary<string, object> a_oDictData) {
+		CFunc.ShowLog($"CPlayfabManager.SendLog: {a_oName}, {a_oDictData}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if PLAYFAB_ANALYTICS_ENABLE && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD) && (UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
 		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WriteTitleEvent(new WriteTitleEventRequest() {
-				EventName = a_oName, Body = a_oDataDict
+				EventName = a_oName, Body = a_oDictData
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_LOG, a_oError));
 		}
 #endif // #if PLAYFAB_ANALYTICS_ENABLE && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD) && (UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
 	}
 
 	/** 유저 로그를 전송한다 */
-	public void SendUserLog(string a_oName, Dictionary<string, object> a_oDataDict) {
-		CFunc.ShowLog($"CPlayfabManager.SendUserLog: {a_oName}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
+	public void SendUserLog(string a_oName, Dictionary<string, object> a_oDictData) {
+		CFunc.ShowLog($"CPlayfabManager.SendUserLog: {a_oName}, {a_oDictData}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if PLAYFAB_ANALYTICS_ENABLE && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD) && (UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
 		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WritePlayerEvent(new WriteClientPlayerEventRequest() {
-				EventName = a_oName, Body = a_oDataDict
+				EventName = a_oName, Body = a_oDictData
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_USER_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_USER_LOG, a_oError));
 		}
 #endif // #if PLAYFAB_ANALYTICS_ENABLE && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD) && (UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
 	}
 
 	/** 캐릭터 로그를 전송한다 */
-	public void SendCharacterLog(string a_oName, string a_oCharacterID, Dictionary<string, object> a_oDataDict) {
-		CFunc.ShowLog($"CPlayfabManager.SendCharacterLog: {a_oName}, {a_oCharacterID}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
+	public void SendCharacterLog(string a_oName, string a_oCharacterID, Dictionary<string, object> a_oDictData) {
+		CFunc.ShowLog($"CPlayfabManager.SendCharacterLog: {a_oName}, {a_oCharacterID}, {a_oDictData}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if PLAYFAB_ANALYTICS_ENABLE && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD) && (UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
 		// 로그인되었을 경우
 		if(this.IsInit && this.IsLogin) {
 			PlayFabClientAPI.WriteCharacterEvent(new WriteClientCharacterEventRequest() {
-				EventName = a_oName, CharacterId = a_oCharacterID, Body = a_oDataDict
+				EventName = a_oName, CharacterId = a_oCharacterID, Body = a_oDictData
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SEND_CHARACTER_LOG, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SEND_CHARACTER_LOG, a_oError));
 		}
 #endif // #if PLAYFAB_ANALYTICS_ENABLE && (ANALYTICS_TEST_ENABLE || STORE_DIST_BUILD) && (UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)

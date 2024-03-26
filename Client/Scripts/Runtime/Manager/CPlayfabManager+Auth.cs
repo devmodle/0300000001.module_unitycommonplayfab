@@ -13,9 +13,9 @@ using PlayFab.SharedModels;
 public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	#region 함수
 	/** 로그인을 처리한다 */
-	public void Login(string a_oDeviceID, System.Action<CPlayfabManager, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.Login: {a_oDeviceID}", KCDefine.B_LOG_COLOR_PLUGIN);
-		CFunc.Assert(a_oDeviceID.ExIsValid());
+	public void Login(string a_oIDDevice, System.Action<CPlayfabManager, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.Login: {a_oIDDevice}", KCDefine.B_LOG_COLOR_PLUGIN);
+		CFunc.Assert(a_oIDDevice.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인되었을 경우
@@ -26,15 +26,15 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 
 #if !UNITY_EDITOR && UNITY_IOS
 			PlayFabClientAPI.LoginWithIOSDeviceID(new LoginWithIOSDeviceIDRequest() {
-				CreateAccount = true, DeviceId = a_oDeviceID, DeviceModel = SystemInfo.deviceModel, OS = SystemInfo.operatingSystem, TitleId = PlayFabSettings.staticSettings.TitleId
+				CreateAccount = true, DeviceId = a_oIDDevice, DeviceModel = SystemInfo.deviceModel, OS = SystemInfo.operatingSystem, TitleId = PlayFabSettings.staticSettings.TitleId
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOGIN, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOGIN, a_oError));
 #elif !UNITY_EDITOR && UNITY_ANDROID
 			PlayFabClientAPI.LoginWithAndroidDeviceID(new LoginWithAndroidDeviceIDRequest() {
-				CreateAccount = true, AndroidDeviceId = a_oDeviceID, AndroidDevice = SystemInfo.deviceModel, OS = SystemInfo.operatingSystem, TitleId = PlayFabSettings.staticSettings.TitleId
+				CreateAccount = true, AndroidDeviceId = a_oIDDevice, AndroidDevice = SystemInfo.deviceModel, OS = SystemInfo.operatingSystem, TitleId = PlayFabSettings.staticSettings.TitleId
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOGIN, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOGIN, a_oError));
 #else
 			PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest() {
-				CreateAccount = true, CustomId = a_oDeviceID, TitleId = PlayFabSettings.staticSettings.TitleId
+				CreateAccount = true, CustomId = a_oIDDevice, TitleId = PlayFabSettings.staticSettings.TitleId
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.LOGIN, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.LOGIN, a_oError));
 #endif // #if !UNITY_EDITOR && UNITY_IOS
 		}

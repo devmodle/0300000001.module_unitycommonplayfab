@@ -156,8 +156,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	}
 
 	/** 유저 데이터를 저장한다 */
-	public void SaveUserDatas(Dictionary<string, string> a_oDataDict, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.SaveUserDatas: {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
+	public void SaveUserDatas(Dictionary<string, string> a_oDictData, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.SaveUserDatas: {a_oDictData}", KCDefine.B_LOG_COLOR_PLUGIN);
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
 		// 로그인되었을 경우
@@ -165,7 +165,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.SAVE_USER_DATAS, a_oCallback);
 
 			PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest() {
-				Data = a_oDataDict, Permission = UserDataPermission.Private
+				Data = a_oDictData, Permission = UserDataPermission.Private
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SAVE_USER_DATAS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SAVE_USER_DATAS, a_oError));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
@@ -249,8 +249,8 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 	}
 
 	/** 캐릭터 데이터를 저장한다 */
-	public void SaveCharacterDatas(string a_oCharacterID, Dictionary<string, string> a_oDataDict, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
-		CFunc.ShowLog($"CPlayfabManager.SaveCharacterDatas: {a_oCharacterID}, {a_oDataDict}", KCDefine.B_LOG_COLOR_PLUGIN);
+	public void SaveCharacterDatas(string a_oCharacterID, Dictionary<string, string> a_oDictData, System.Action<CPlayfabManager, PlayFabResultCommon, bool> a_oCallback) {
+		CFunc.ShowLog($"CPlayfabManager.SaveCharacterDatas: {a_oCharacterID}, {a_oDictData}", KCDefine.B_LOG_COLOR_PLUGIN);
 		CFunc.Assert(a_oCharacterID.ExIsValid());
 
 #if UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
@@ -259,7 +259,7 @@ public partial class CPlayfabManager : CSingleton<CPlayfabManager> {
 			m_oCallbackDictB.ExReplaceVal(EPlayfabCallback.SAVE_CHARACTER_DATAS, a_oCallback);
 
 			PlayFabClientAPI.UpdateCharacterData(new UpdateCharacterDataRequest() {
-				CharacterId = a_oCharacterID, Data = a_oDataDict, Permission = UserDataPermission.Private
+				CharacterId = a_oCharacterID, Data = a_oDictData, Permission = UserDataPermission.Private
 			}, (a_oResponse) => this.OnReceiveResponse(EPlayfabCallback.SAVE_CHARACTER_DATAS, a_oResponse), (a_oError) => this.OnReceiveFailResponse(EPlayfabCallback.SAVE_CHARACTER_DATAS, a_oError));
 		} else {
 			CFunc.Invoke(ref a_oCallback, this, null, false);
